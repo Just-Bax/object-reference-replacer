@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'Ctrl-Space': 'autocomplete'
         }
     });
+    editor.setSize(null, 500);
     editor.setValue("-- Your PL/SQL code here");
 });
 
