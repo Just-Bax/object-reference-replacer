@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function update_label(file_id, filename) {
-    const button_text = "Object Reference file";
+    const button_text = "Object Reference csv file";
     const file_input = document.getElementById(file_id);
     const file_label = document.querySelector(`label[for="${file_id}"]`);
     file_label.textContent = button_text + ' ' + (file_input.files.length > 0 ? `[${filename}]` : '');
@@ -48,7 +48,7 @@ function read_file(input) {
 
 function replace_sql(sql) {
     if (object_reference_data === null) {
-        alert('Object Reference file is not selected');
+        alert('Object Reference csv file is not selected');
         return;
     }
     var sql = editor.getValue();
