@@ -83,6 +83,13 @@ function replace_sql(sql) {
     editor.setValue(sql);
 }
 
+function remove_obj_ref() {
+    var sql = editor.getValue();
+    const regex = /id\.get\('([^']+)'\)/g;
+    sql = sql.replace(regex, '$1');
+    editor.setValue(sql);
+}
+
 function copy_sql() {
     var sql = editor.getValue();
     navigator.clipboard.writeText(sql);
