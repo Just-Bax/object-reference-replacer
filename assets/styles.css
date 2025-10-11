@@ -1,0 +1,279 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    padding: 2rem;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 1rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+}
+
+.header {
+    margin-bottom: 1.5rem;
+}
+
+.header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.header p {
+    color: #718096;
+    font-size: 0.95rem;
+}
+
+.editor-wrapper {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    padding: 0.5rem;
+    border: 2px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background: #f7fafc;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+}
+
+.btn {
+    background: linear-gradient(135deg, #2c5364 0%, #203a43 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(44, 83, 100, 0.3);
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #203a43 0%, #0f2027 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 83, 100, 0.5);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-label {
+    background: linear-gradient(135deg, #2c5364 0%, #203a43 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(44, 83, 100, 0.3);
+    height: 38px;
+}
+
+.btn-label:hover {
+    background: linear-gradient(135deg, #203a43 0%, #0f2027 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 83, 100, 0.5);
+}
+
+.file-input {
+    display: none;
+}
+
+.prefix-wrapper {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    height: 38px;
+}
+
+.prefix-wrapper:hover {
+    border-color: #2c5364;
+}
+
+.prefix-wrapper:focus-within {
+    border-color: #2c5364;
+    box-shadow: 0 0 0 3px rgba(44, 83, 100, 0.1);
+}
+
+.prefix-label {
+    margin-right: 0.5rem;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.prefix-input {
+    width: 120px;
+    outline: none;
+    color: #2d3748;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+    height: 100%;
+}
+
+.prefix-input::placeholder {
+    color: #a0aec0;
+}
+
+.checkbox-wrapper {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ffffff;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    height: 38px;
+}
+
+.checkbox-wrapper:hover {
+    border-color: #2c5364;
+    background: #f7fafc;
+}
+
+.checkbox {
+    width: 1.125rem;
+    height: 1.125rem;
+    cursor: pointer;
+    accent-color: #2c5364;
+}
+
+.CodeMirror {
+    height: 500px;
+    font-size: 14px;
+    border-radius: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+    body {
+        padding: 1.5rem;
+    }
+    
+    .container {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    
+    .container {
+        padding: 1rem;
+    }
+    
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .header p {
+        font-size: 0.875rem;
+    }
+    
+    .toolbar {
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+    
+    .btn,
+    .btn-label {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .prefix-wrapper {
+        width: 100%;
+    }
+    
+    .prefix-input {
+        flex: 1;
+        width: auto;
+    }
+    
+    .checkbox-wrapper {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .CodeMirror {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 0.5rem;
+    }
+    
+    .container {
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+    }
+    
+    .header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .header p {
+        font-size: 0.8rem;
+    }
+    
+    .toolbar {
+        padding: 0.5rem;
+    }
+    
+    .btn,
+    .btn-label,
+    .prefix-wrapper,
+    .checkbox-wrapper {
+        font-size: 13px;
+        height: 36px;
+    }
+    
+    .CodeMirror {
+        height: 300px;
+        font-size: 13px;
+    }
+}
