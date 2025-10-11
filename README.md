@@ -9,7 +9,6 @@ A web-based tool for replacing object reference IDs in PL/SQL code with their co
 - **Automatic Replacement**: Replace numeric IDs with object reference names
 - **Module Prefix**: Add custom prefixes to object references
 - **ID Get Wrapper**: Optionally wrap references in `id.get()` function
-- **SQL Formatter**: Format and beautify SQL code with proper indentation
 - **Copy to Clipboard**: Quick copy functionality for processed SQL
 
 ## Usage
@@ -52,14 +51,6 @@ When a module prefix is specified, it will be added to object references based o
 - **Relation**: `id.trackor_type.rel.relationship_name` → `id.prefix_trackor_type.rel.prefix_relationship_name`
 - **Trackor Types**: `id.trackor_type.tt` → `id.prefix_trackor_type.tt`
 - **Validation Tables**: `id.vt.table_name` → `id.vt.prefix_table_name`
-
-## Format SQL
-
-The "Format SQL" button formats and beautifies your SQL code with:
-- Proper indentation and line breaks
-- Uppercase SQL keywords
-- Aligned clauses (SELECT, FROM, WHERE, etc.)
-- Comma-separated values on new lines
 
 ## Remove ID Get
 
