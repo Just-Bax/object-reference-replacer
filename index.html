@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./assets/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/sql/sql.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <div class="container">
@@ -15,26 +16,38 @@
             <h1>Object Reference Replacer</h1>
             <p>Replace numeric IDs in PL/SQL code with object reference names</p>
         </div>
-        
+
         <div id="editor" class="editor-wrapper"></div>
-        
+
         <div class="toolbar">
-            <label for="obj-ref" class="btn-label">Load CSV File</label>
+            <label for="obj-ref" class="btn-label"><i data-lucide="file-up" class="icon"></i>Load CSV File</label>
             <input type="file" name="obj-ref" id="obj-ref" class="file-input" accept="text/csv" onchange="read_file(this)">
-            <button class="btn" onclick="replace_sql()">Replace</button>
-            <label class="prefix-wrapper">
-                <span class="prefix-label">Module prefix</span>
-                <input class="prefix-input" type="text" name="prefix" id="prefix" placeholder="e.g., VHMUC">
-            </label>
+            
+            <span class="divider"></span>
+            
+            <input class="input-field" type="text" name="prefix" id="prefix" placeholder="Module prefix (e.g., vhmetc)">
+            <button class="btn primary" onclick="replace_sql()"><i data-lucide="wand-2" class="icon"></i>Replace</button>
+
+            <span class="divider"></span>
+
             <label for="id-get" class="checkbox-wrapper">
                 <input type="checkbox" id="id-get" name="id-get" class="checkbox" checked>
-                <span>Id Get</span>
+                <span>Wrap with <code>id.get()</code></span>
             </label>
-            <button class="btn" onclick="remove_obj_ref()">Remove ID Get</button>
-            <button class="btn" onclick="copy_sql()">Copy</button>
+            <button class="btn" onclick="remove_obj_ref()"><i data-lucide="scissors" class="icon"></i>Remove <code>id.get()</code></button>
+            
+            <span class="divider"></span>
+            
+            <button class="btn" onclick="paste_sql()"><i data-lucide="clipboard-paste" class="icon"></i>Paste</button>
+            <button class="btn" onclick="copy_sql()"><i data-lucide="copy" class="icon"></i>Copy</button>
         </div>
     </div>
 
     <script src="./assets/script.js"></script>
+    <script>
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
+    </script>
 </body>
 </html>

@@ -5,7 +5,7 @@ const App = (() => {
     let editor = null;
 
     const CONSTANTS = {
-        BUTTON_TEXT: 'Load CSV File',
+        BUTTON_TEXT: 'Load CSV (OBJ REF)',
         DEFAULT_SQL: '-- Your PL/SQL code here',
         EDITOR_HEIGHT: 500,
         ALERT_MESSAGE: 'Please load a CSV file first',
@@ -21,25 +21,47 @@ const App = (() => {
         const editorElement = document.getElementById('editor');
         if (!editorElement) return;
 
+        if (typeof CodeMirror !== 'undefined' && CodeMirror.commands) {
+            CodeMirror.commands.pasteSql = () => {
+                pasteSql();
+            };
+        }
+
         editor = CodeMirror(editorElement, {
             mode: 'text/x-plsql',
             lineNumbers: true,
             theme: 'default',
             extraKeys: {
-                'Ctrl-Space': 'autocomplete'
+                'Ctrl-Space': 'autocomplete',
+                'Ctrl-V': 'pasteSql'
             }
         });
         editor.setSize(null, CONSTANTS.EDITOR_HEIGHT);
         editor.setValue(CONSTANTS.DEFAULT_SQL);
     };
 
-    const updateFileLabel = (fileId, filename) => {
+    const escapeHtml = (unsafe) => {
+        return String(unsafe)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    };
+
+    const updateFileLabel = (fileId, filename, options = {}) => {
         const fileLabel = document.querySelector(`label[for="${fileId}"]`);
         if (!fileLabel) return;
 
         const displayText = filename 
             ? `${CONSTANTS.BUTTON_TEXT} [${filename}]` 
             : CONSTANTS.BUTTON_TEXT;
+
+        if (options.allowHtml) {
+            fileLabel.innerHTML = options.html || escapeHtml(displayText);
+            return;
+        }
+
         fileLabel.textContent = displayText;
     };
 
@@ -99,7 +121,14 @@ const App = (() => {
         const file = input.files?.[0];
         if (!file) return;
 
-        updateFileLabel(input.id, file.name);
+        updateFileLabel(input.id, file.name, {
+            allowHtml: true,
+            html: `<i data-lucide="file-up" class="icon"></i>${escapeHtml(CONSTANTS.BUTTON_TEXT)} <span class="muted">[${escapeHtml(file.name)}]</span>`
+        });
+
+        if (typeof window !== 'undefined' && window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
 
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -177,6 +206,19 @@ const App = (() => {
         }
     };
 
+    const pasteSql = async () => {
+        if (!editor) return;
+
+        try {
+            const text = await navigator.clipboard.readText();
+            if (typeof text === 'string') {
+                editor.setValue(text);
+            }
+        } catch (error) {
+            alert('Clipboard access is not available. Paste with Ctrl+V into the editor.');
+        }
+    };
+
     const init = () => {
         document.addEventListener('DOMContentLoaded', initializeEditor);
     };
@@ -186,7 +228,9 @@ const App = (() => {
         readFile,
         replaceSql,
         removeIdGet,
-        copySql
+        copySql,
+        pasteSql,
+        updateFileLabel
     };
 })();
 
@@ -206,4 +250,12 @@ function remove_obj_ref() {
 
 function copy_sql() {
     App.copySql();
+}
+
+function paste_sql() {
+    App.pasteSql();
+}
+
+function update_file_label(fileId, filename, options) {
+    App.updateFileLabel(fileId, filename, options);
 }
