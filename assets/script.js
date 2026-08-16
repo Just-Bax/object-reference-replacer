@@ -5,9 +5,8 @@ const App = (() => {
     let editor = null;
 
     const CONSTANTS = {
-        BUTTON_TEXT: 'Load CSV (OBJ REF)',
+        BUTTON_TEXT: 'Load CSV',
         DEFAULT_SQL: '-- Your PL/SQL code here',
-        EDITOR_HEIGHT: 500,
         ALERT_MESSAGE: 'Please load a CSV file first',
         OBJECT_TYPES: {
             FIELDS: 'Fields',
@@ -36,7 +35,7 @@ const App = (() => {
                 'Ctrl-V': 'pasteSql'
             }
         });
-        editor.setSize(null, CONSTANTS.EDITOR_HEIGHT);
+        editor.setSize(null, '100%');
         editor.setValue(CONSTANTS.DEFAULT_SQL);
     };
 
@@ -49,20 +48,19 @@ const App = (() => {
             .replaceAll("'", '&#039;');
     };
 
-    const updateFileLabel = (fileId, filename, options = {}) => {
-        const fileLabel = document.querySelector(`label[for="${fileId}"]`);
-        if (!fileLabel) return;
+    const updateFileLabel = (fileId, filename) => {
+        const fileStatus = document.getElementById('file-status');
+        const toolPanel = document.getElementById('tool-panel');
+        const hasFile = Boolean(filename);
 
-        const displayText = filename 
-            ? `${CONSTANTS.BUTTON_TEXT} [${filename}]` 
-            : CONSTANTS.BUTTON_TEXT;
-
-        if (options.allowHtml) {
-            fileLabel.innerHTML = options.html || escapeHtml(displayText);
-            return;
+        if (fileStatus) {
+            fileStatus.textContent = hasFile ? filename : 'CSV required';
+            fileStatus.classList.toggle('loaded', hasFile);
         }
 
-        fileLabel.textContent = displayText;
+        if (toolPanel) {
+            toolPanel.classList.toggle('csv-loaded', hasFile);
+        }
     };
 
     const parseCSV = (csvContent) => {
@@ -117,27 +115,57 @@ const App = (() => {
         return result;
     };
 
-    const readFile = (input) => {
-        const file = input.files?.[0];
+    const loadObjectReferenceFile = (file) => {
         if (!file) return;
-
-        updateFileLabel(input.id, file.name, {
-            allowHtml: true,
-            html: `<i data-lucide="file-up" class="icon"></i>${escapeHtml(CONSTANTS.BUTTON_TEXT)} <span class="muted">[${escapeHtml(file.name)}]</span>`
-        });
-
-        if (typeof window !== 'undefined' && window.lucide && typeof window.lucide.createIcons === 'function') {
-            window.lucide.createIcons();
-        }
 
         const reader = new FileReader();
         reader.onload = (event) => {
             objectReferenceData = parseCSV(event.target.result);
+            updateFileLabel('obj-ref', file.name);
         };
         reader.onerror = () => {
             alert('Error reading file');
         };
         reader.readAsText(file);
+    };
+
+    const readFile = (input) => {
+        const file = input.files?.[0];
+        if (!file) return;
+
+        loadObjectReferenceFile(file);
+        input.value = '';
+    };
+
+    const initializeUploadDropZone = () => {
+        const dropZone = document.getElementById('upload-drop-zone');
+        if (!dropZone) return;
+
+        const stopDefaults = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
+        ['dragenter', 'dragover'].forEach((eventName) => {
+            dropZone.addEventListener(eventName, (event) => {
+                stopDefaults(event);
+                dropZone.classList.add('drag-over');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach((eventName) => {
+            dropZone.addEventListener(eventName, (event) => {
+                stopDefaults(event);
+                dropZone.classList.remove('drag-over');
+            });
+        });
+
+        dropZone.addEventListener('drop', (event) => {
+            const file = event.dataTransfer?.files?.[0];
+            if (file) {
+                loadObjectReferenceFile(file);
+            }
+        });
     };
 
     const replaceSql = () => {
@@ -220,7 +248,10 @@ const App = (() => {
     };
 
     const init = () => {
-        document.addEventListener('DOMContentLoaded', initializeEditor);
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEditor();
+            initializeUploadDropZone();
+        });
     };
 
     return {

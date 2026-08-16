@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Object Reference Replacer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
     <link rel="stylesheet" href="./assets/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
@@ -11,37 +14,62 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Object Reference Replacer</h1>
-            <p>Replace numeric IDs in PL/SQL code with object reference names</p>
-        </div>
-
-        <div id="editor" class="editor-wrapper"></div>
-
-        <div class="toolbar">
-            <label for="obj-ref" class="btn-label"><i data-lucide="file-up" class="icon"></i>Load CSV File</label>
+    <main class="tool-shell">
+        <section id="tool-panel" class="tool-panel">
             <input type="file" name="obj-ref" id="obj-ref" class="file-input" accept="text/csv" onchange="read_file(this)">
-            
-            <span class="divider"></span>
-            
-            <input class="input-field" type="text" name="prefix" id="prefix" placeholder="Module prefix (e.g., vhmetc)">
-            <button class="btn primary" onclick="replace_sql()"><i data-lucide="wand-2" class="icon"></i>Replace</button>
 
-            <span class="divider"></span>
+            <div class="top-panel">
+                <div class="tool-header">
+                    <div class="title-group">
+                        <h1>Object Reference Replacer</h1>
+                        <p>Replace numeric IDs in PL/SQL code with object reference names</p>
+                    </div>
 
-            <label for="id-get" class="checkbox-wrapper">
-                <input type="checkbox" id="id-get" name="id-get" class="checkbox" checked>
-                <span>Wrap with <code>id.get()</code></span>
-            </label>
-            <button class="btn" onclick="remove_obj_ref()"><i data-lucide="scissors" class="icon"></i>Remove <code>id.get()</code></button>
-            
-            <span class="divider"></span>
-            
-            <button class="btn" onclick="paste_sql()"><i data-lucide="clipboard-paste" class="icon"></i>Paste</button>
-            <button class="btn" onclick="copy_sql()"><i data-lucide="copy" class="icon"></i>Copy</button>
-        </div>
-    </div>
+                    <div id="file-summary" class="file-summary" aria-live="polite">
+                        <i data-lucide="table-2" class="icon"></i>
+                        <span id="file-status" class="file-status">CSV required</span>
+                        <label for="obj-ref" class="btn change-csv">Change CSV</label>
+                    </div>
+                </div>
+
+                <div id="upload-panel" class="upload-panel">
+                    <div id="upload-drop-zone" class="upload-drop-zone">
+                        <i data-lucide="table-2" class="upload-icon"></i>
+                        <span class="upload-title">Object references CSV</span>
+                        <span class="upload-description">Drop CSV here or choose a file</span>
+                        <span class="upload-actions">
+                            <label for="obj-ref" class="btn-label"><i data-lucide="folder-open" class="icon"></i>Choose CSV file</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="toolbar">
+                    <div class="control-group options-group">
+                        <label class="field-group" for="prefix">
+                            <span class="field-label">Module prefix</span>
+                            <input class="input-field" type="text" name="prefix" id="prefix" placeholder="vhmetc">
+                        </label>
+
+                        <label for="id-get" class="checkbox-wrapper">
+                            <input type="checkbox" id="id-get" name="id-get" class="checkbox" checked>
+                            <span>Wrap with <code>id.get()</code></span>
+                        </label>
+                    </div>
+
+                    <div class="control-group actions-group">
+                        <button class="btn primary" onclick="replace_sql()"><i data-lucide="wand-2" class="icon"></i>Replace references</button>
+                        <button class="btn utility" onclick="remove_obj_ref()"><i data-lucide="scissors" class="icon"></i>Remove wrappers</button>
+                    </div>
+
+                    <div class="control-group clipboard-group">
+                        <button class="btn" onclick="copy_sql()"><i data-lucide="copy" class="icon"></i>Copy SQL</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="editor" class="editor-wrapper"></div>
+        </section>
+    </main>
 
     <script src="./assets/script.js"></script>
     <script>
